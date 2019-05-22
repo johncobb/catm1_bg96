@@ -15,3 +15,12 @@
  * power down:   AT+QPOWD
 
  */
+
+https://en-support.renesas.com/knowledgeBase/18027787?elqTrackId=2eedc4be06824b1c9fde5f6f327273c8&elqaid=735&elqat=2#h_222660080111539037853528
+Some or all of these PDFs require registration with Quectel website:
+References:
+Quectel_BG96_AT_Commands_Manual_V2.3 (PDF)
+Quectel_BG96_TCP(IP)_AT_Commands_Manual_V1.0 (PDF)
+Quectel_BG96_SSL_AT_Commands_Manual_V1.0 (PDF)
+Quectel_BG96_GNSS_AT_Commands_Manual_V1.1 (PDF)
+Quectel_BG96_MQTT_Application_Note_V1.0 (PDF)

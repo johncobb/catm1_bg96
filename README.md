@@ -29,8 +29,11 @@ AT
 OK
 ```
 
-As a personal preference I like to see what I'm typing into the terminal so the first command I issue is an `ATE1` which turns the echo on. Anything typed into the terminal will be echoed back to you . When designing an application to automate the modem you'll want to turn this command off by issuing `ATE0`.
+As a personal preference I like to see what I'm typing into the terminal so the first command I issue is an `ATE1` which turns the echo on. Anything typed into the terminal will be echoed back to you . When designing an application to automate the modem you'll want to turn this command off by issuing `ATE0`. 
 
+The commands in the snippet below are the initialization commands to prepare the modem for communication on the network. There can be many issues during this process so follow the Keep It Simple Stupid method. Make sure you have a SIM inserted. Make sure the SIM is active. Make sure you have the correct APN number to verify.
+
+#### General initialization and network preparation
 ```console
 # set verbose logging
 AT+CMEE=2
@@ -56,6 +59,18 @@ AT+CGREG?
 # power down device
 AT+QPOWD
 
+```
+
+### I cannot get my modem to register
+Well join the club. When I first set out to configure this and other modems that are Cat-M1 and NB-IoT they would not connect to the network. You have to set the network fallback technologies via the network scan parameter. This will allow the network to fallback to GSM in the event Cat-M1 or NB-IoT are not activated in your area. The command that worked for me is listed below.
+
+```console
+# 01 NB-IoT
+# 02 Cat-M1
+# 03 GSM
+
+# first try Cat-M1 then try GSM and NB-IoT is just finally
+AT+QCFG="nwscan",020301
 ```
 
 
