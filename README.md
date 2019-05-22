@@ -11,7 +11,7 @@ Some or all references to Quectel's PDFs require registration on the Quectel web
 
 ### Connecting the UMTS&LTEEVB - KIT
 
-By default, the modem is powered down. Momemtarily press the PWRKEY (500 ms) on the evaluation kit to initiate the powerup sequence. The red POWER led and green STATUS led should be illuminated. You may also see the blue NET_STA led flashing a sequence of status messages. Consult the PDF to decipher. Now, let's get started communicating with the modem.
+By default, the modem is powered down. Momemtarily press the PWRKEY (300 ms) on the evaluation kit to initiate the powerup sequence. The red POWER led and green STATUS led should be illuminated. You may also see the blue NET_STA led flashing a sequence of status messages. Consult the PDF to decipher. Now, let's get started communicating with the modem.
 
 Connect the evaluation to a USB power source. Next connect the (provided) USB to Serial cable to your computer. Determine which serial device to connect to by issuing the command below:
 
@@ -72,6 +72,18 @@ AT+CGREG?
 
 OK
 
+# query network info
+AT+QNWINFO
++QNWINFO: "EDGE","310260","GSM 1900",613
+
+OK
+
+# query name of registered network
+AT+QSPN
++QSPN: "T-Mobile","T-Mobile","Hologram",0,"310260"
+
+OK
+
 
 
 # power down device
@@ -88,7 +100,8 @@ Well join the club. When I first set out to configure this and other modems that
 # 03 GSM
 
 # first try Cat-M1 then try GSM and NB-IoT is just finally
-AT+QCFG="nwscan",020301
+AT+QCFG="nwscanseq",020301
+OK
 ```
 
 ### Configuring and connecting to Amazon's AWSIoT via SSL
