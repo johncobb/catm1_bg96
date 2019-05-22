@@ -6,11 +6,12 @@
 Some or all references to Quectel's PDFs require registration on the Quectel website:
 
 ### Prerequisites:
+ - UMTS&LTEEVB - KIT
  - Download the latest version of PDF(s) listed in the References section below
 
 ### Connecting the UMTS&LTEEVB - KIT
 
-By default, the modem is powered down. Momemtarily press the PWRKEY (approx. 500 ms) on the evaluation kit to initiate the powerup sequence. The red POWER led and green STATUS led should be illuminated. You may also see the blue NET_STA led flashing a sequence of status messages. Consult the PDF to decipher. Now, let's get started communicating with the modem.
+By default, the modem is powered down. Momemtarily press the PWRKEY (500 ms) on the evaluation kit to initiate the powerup sequence. The red POWER led and green STATUS led should be illuminated. You may also see the blue NET_STA led flashing a sequence of status messages. Consult the PDF to decipher. Now, let's get started communicating with the modem.
 
 Connect the evaluation to a USB power source. Next connect the (provided) USB to Serial cable to your computer. Issue the commands below to determine which port to connect to to issue AT commands.
 
