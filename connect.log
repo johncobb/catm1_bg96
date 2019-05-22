@@ -20,11 +20,7 @@ at
 OK
 ate1
 OK
-at
-OK
 at&f
-OK
-at
 OK
 at+cops?
 +COPS: 0,0,"T-Mobile Hologram",0
@@ -36,26 +32,12 @@ at+cgact?
 +CGACT: 1,1
 
 OK
-at+cmgs="8126290240"
-+CMS ERROR: 304
-at+cops?
-+COPS: 0,0,"T-Mobile Hologram",0
 
-OK
-at
-OK
 at+cgdcont?
 +CGDCONT: 1,"IP","hologram","0.0.0.0",0,0,0,0
 
 OK
-at+qicsgp?
-ERROR
-at+qiCsgp
-ERROR
-AT+QICSGP
-ERROR
-AT+QICSGP?
-ERROR
+
 ATI
 Quectel
 BG96
@@ -104,10 +86,7 @@ AT+CPIN?
 +CPIN: READY
 
 OK
-AT+CLCK?
-ERROR
-AT+QCCID?
-ERROR
+
 AT+QCCID
 +QCCID: 8944500307186446055F
 
@@ -120,94 +99,25 @@ AT+CGATT?
 +CGATT: 1
 
 OK
-AT+CGACT=1,1
-ERROR
-AT+SGACT?
-ERROR
+
 AT+CGACT?
 +CGACT: 1,1
 
 OK
-AT+CMGS="8126290240"
-+CMS ERROR: 304
-AT+CMGF?
-+CMGF: 0
 
-OK
 AT+CREG?
 +CREG: 0,5
 
 OK
 at
 OK
-at+cmgs="8126290240"
-+CMS ERROR: 304
-at+cmgf?
-+CMGF: 0
 
-OK
-at+cmgf=1
-OK
-at+cmgs="8126290240"
-> Hello World
-> 
-+CMGS: 28
-
-OK
-at
-OK
-at+cmgf?
-+CMGF: 1
-
-OK
-at&f
-OK
-at+cmgf=
-ERROR
-at+cmgf?
-+CMGF: 0
-
-OK
-at+cmgf=1
-OK
-at
-OK
-at+cmgcf?
-ERROR
-at+cmgf?
-+CMGF: 1
-
-OK
-at+qgpsgnmea
-ERROR
 at+qgpsgnmea?
 OK
-aaat
-OK
-at
-OK
-at+qgpsnmea
-ERROR
-at+
-ERROR
-AT+QGPSGNMEA
-ERROR
+
 AT+QGPSGNMEA?
 OK
-at+
-ERROR
-at+qgpscfg
-+CME ERROR: 502
-at+qgpscfg?
-+CME ERROR: 502
-at+qgpscfg
-+CME ERROR: 502
-at+cme=2
-ERROR
-at+cmee=2
-OK
-at+qgpscfg
-+CME ERROR: Operation not supported
+
 at+cclk?
 +cclk: "19/05/17,17:19:02-20"
 
@@ -216,20 +126,7 @@ at+cbc
 +CBC: 0,17,3614
 
 OK
-at+cclk
-ERROR
-at+cclk?
-+cclk: "19/05/17,17:19:18-20"
 
-OK
-at+cclk
-ERROR
-at+cclk?
-+cclk: "19/05/17,17:19:23-20"
-
-OK
-at+qtemp?
-ERROR
 at+qtemp
 +QTEMP: 28,25,25
 
@@ -248,18 +145,10 @@ at+qiact=1
 OK
 at+qhttpurl?
 OK
-at+cqfg?
-ERROR
-at+cqfg-:b
-ERROR
+
 at+cqfg="
 +QIURC: "pdpdeact",1
-baat+
-ERROR
-at+cqfg="band"
-ERROR
-at+c
-ERROR
+
 at+qcfg="band"
 +QCFG: "band",0xf,0x400a0e189f,0xa0e189f
 
@@ -276,93 +165,12 @@ RDY
 +QIND: SMS DONE
 
 APP RDY
-at
-OK
-at
-OK
+
 at+qcfg="band"
 +QCFG: "band",0xf,0x400a0e189f,0xa0e189f
-
-RDY
-a
-+CFUN: 1
-t
-+CPIN: READY
-
-+QUSIM: 1
-
-+QIND: SMS DONE
-
-OK
-
-APP RDY
-at
-OK
-at
-OK
-at
-OK
 
 at+qgps=1
-OK
-at+qgpsloc=2
-+CME ERROR: 501
-at+qgpsloc=2
-+CME ERROR: 516
-at+cmee?
-+CMEE: 1
 
-OK
-at+cmee=2
-OK
-
-
-at+qcfg="band"
-+QCFG: "band",0xf,0x400a0e189f,0xa0e189f
-
-OK
-
-at+qcfg="band"
-+QCFG: "band",0xf,0x400a0e189f,0xa0e189f
-
-OK
-at+cereg?
-+CEREG: 0,4
-
-OK
-
-at+cereg=2
-OK
-
-at+cfun?
-+CFUN: 1
-
-OK
-at+cops?
-+COPS: 0,0,"T-Mobile Hologram",0
-
-OK
-
-at+cereg?
-+CEREG: 2,4
-
-OK
-at+cereg?
-+CEREG: 2,4
-
-OK
-
-RDY
-
-+CFUN: 1
-
-APP RDY
-
-+CPIN: READY
-
-+QUSIM: 1
-
-+QIND: SMS DONE
 at
 OK
 at+cmgf?
@@ -510,31 +318,7 @@ AT+CEREG?
 +CEREG: 2,4
 
 OK
-?@?
-   @J
-RDY
 
-+CFUN: 1
-
-APP RDY
-
-+CPIN: READY
-
-+QUSIM: 1
-
-+QIND: SMS DONE
-ATZ
-OK
-AT
-OK
-ATE1
-OK
-AT+CREG=0
-OK
-AT+CMEE=0
-OK
-AT&W
-OK
 AT+QCFG="nwscanseq"
 +QCFG: "nwscanseq",020301
 

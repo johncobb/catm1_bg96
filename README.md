@@ -13,7 +13,7 @@ Some or all references to Quectel's PDFs require registration on the Quectel web
 
 By default, the modem is powered down. Momemtarily press the PWRKEY (500 ms) on the evaluation kit to initiate the powerup sequence. The red POWER led and green STATUS led should be illuminated. You may also see the blue NET_STA led flashing a sequence of status messages. Consult the PDF to decipher. Now, let's get started communicating with the modem.
 
-Connect the evaluation to a USB power source. Next connect the (provided) USB to Serial cable to your computer. Issue the commands below to determine which port to connect to to issue AT commands.
+Connect the evaluation to a USB power source. Next connect the (provided) USB to Serial cable to your computer. Determine which serial device to connect to by issuing the command below:
 
 ```console
 ls /dev | grep tty.us
@@ -21,7 +21,7 @@ tty.usbserial-FTASWORM
 tty.usbserial-FTWKWE7H
 ```
 
-On my computer the `tty.usbserial-FTWKWE7H` interface was the one I was looking for. Now fire up your favorite terminal software to begin communicating with the modem. In my example I will be using cu. After a successful connection is established issue an AT followed by a carriage return and the modem should respond with OK.
+On my computer the `tty.usbserial-FTWKWE7H` interface was the one I was looking for. Now fire up your favorite terminal software to begin communicating with the modem. In my example I will be using `cu`. After a successful connection is established issue an AT followed by a carriage return and the modem should respond with OK.
 
 ```console
 sudo cu -l tty.usbserial-FTASWORM -s 115200
@@ -56,6 +56,23 @@ AT+COPS?
 AT+CGREG?
 +CGREG: 0,5
 
+# signal quality (response: <rssi>, <ber>)
+AT+CSQ
++CSQ: 13,99
+
+OK
+
+# apply PSM, enable network registration and location information
+AT+CGREG=4
+OK
+
+# query registration status
+AT+CGREG?
++CGREG: 4,5,"66C0","1042","0",,,,"00000000","01100000","00000000"
+
+OK
+
+
 
 # power down device
 AT+QPOWD
@@ -63,7 +80,7 @@ AT+QPOWD
 ```
 
 ### I cannot get my modem to register
-Well join the club. When I first set out to configure this and other modems that are Cat-M1 and NB-IoT they would not connect to the network. You have to set the network fallback technologies via the network scan parameter. This will allow the network to fallback to GSM in the event Cat-M1 or NB-IoT are not activated in your area. The command that worked for me is listed below.
+Well join the club. When I first set out to configure this and other modems that are Cat-M1 and NB-IoT they would not connect to the network. You have to set the network fallback technologies via the network scan parameter. This allows the network to fallback to GSM in the event Cat-M1 or NB-IoT are not active in your area. The command that worked for me is listed below.
 
 ```console
 # 01 NB-IoT
@@ -74,9 +91,101 @@ Well join the club. When I first set out to configure this and other modems that
 AT+QCFG="nwscan",020301
 ```
 
+### Configuring and connecting to Amazon's AWSIoT via SSL
+
+The following commands configure a SSL based connection the Amazon IoT platform. Refer to the Quectel_BG96_MQTT_Application_Note_V1.0 pdf to get a more in depth view of each command.
+
+```console
+
+# configure MQTT session to use SSL mode
+AT+QMTCFG=”SSL”, 0, 1, 2
+OK
+
+# if SSL authentication mode is "server authentication" store CA certificate to RAM
+AT+QFUPL="cacert.pem",1758,100
+CONNECT
+<Input the cacert.pem data, the size is 1758 bytes> +QFUPL: 1758,384a
+OK
+
+# if SSL authentication mode is "server authentication" store CC certificate to RAM
+AT+QFUPL="client.pem",1220,100
+CONNECT
+<Input the client.pem data, the size is 1220 bytes> +QFUPL: 1220,2d53
+OK
+
+# if SSL authentication mode is "server authentication" store CK certificate to RAM
+AT+QFUPL="user_key.pem",1679,100
+CONNECT
+<Input the client.pem data, the size is 1679 bytes> +QFUPL: 1679,335f
+OK
+
+# configure CA certificate
+AT+QSSLCFG="cacert",2,"cacert.pem"
+OK
+
+# configure CC certificate
+AT+QSSLCFG="clientcert",2,"client.pem"
+
+# configure CK certificate
+AT+QSSLCFG="clientkey",2,"user_key.pem"
+OK
+
+# SSL authentication mode: server authentication
+AT+QSSLCFG="seclevel”,2,2
+OK
+
+# SSL authentication version
+AT+QSSLCFG="sslversion”,2,4
+OK
+
+# cipher suite
+AT+QSSLCFG="ciphersuite”,2,”0xFFFF”
+OK
+
+# ignore time of authentication
+AT+QSSLCFG="ignorelocaltime",1
+OK
+
+```
+
+### Let's connect already!
+
+Now is a good time for a coffee break. I like to take time and enjoy the moment of truth or at least have enough caffeine in my system to continue down the path of debugging connectivity issues.
+
+```console
+# start MQTT SSL connection
+AT+QMTOPEN=0, "a1zgnxur10j8ux.iot.us-east-1.amazonaws.com",”8883”
+OK
++QMTOPEN: 0,0
+
+# connect to MQTT server
+AT+QMTCONN=0,"M26_0206"
+OK
++QMTCONN: 0,0,0
+
+# subscribe to topics
+AT+QMTSUB=0,1,"$aws/things/M26_0206/shadow/update/accepted",1
+OK
++QMTSUB: 0,1,0,1
+
+# publish messages
+AT+QMTPUB=0,1,1,0,"$aws/things/M26_0206/shadow/update/accepted"
+>This is publish data from client OK
++QMTPUB: 0,1,0
+
+# data received from subscribed topic
++QMTRECV: 0,1,"$aws/things/M26_0206/shadow/update/accepted",This is publish data from client"
+
+# disconnect a client from MQTT server
+AT+QMTDISC=0
+OK +QMTDISC: 0,0
+```
+
 
 
 ### Establish a TCP connection:
+The following does fall outside the scope of this tutorial however I felt it is relevant to include. Establishing a TCP connection is a good way to exercise the modem to ensure we have connectivity. 
+
 ```console
 
 # set APN
