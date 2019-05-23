@@ -115,32 +115,32 @@ AT+QMTCFG=”SSL”, 0, 1, 2
 OK
 
 # if SSL authentication mode is "server authentication" store CA certificate to RAM
-AT+QFUPL="cacert.pem",1758,100
+AT+QFUPL="rootca1.pem",1758,100
 CONNECT
-<Input the cacert.pem data, the size is 1758 bytes> +QFUPL: 1758,384a
+<Input the rootca1.pem data, the size is 1758 bytes> +QFUPL: 1758,384a
 OK
 
 # if SSL authentication mode is "server authentication" store CC certificate to RAM
-AT+QFUPL="client.pem",1220,100
+AT+QFUPL="certificate.pem.crt",1220,100
 CONNECT
-<Input the client.pem data, the size is 1220 bytes> +QFUPL: 1220,2d53
+<Input the certificate.pem.crt data, the size is 1220 bytes> +QFUPL: 1220,2d53
 OK
 
 # if SSL authentication mode is "server authentication" store CK certificate to RAM
-AT+QFUPL="user_key.pem",1679,100
+AT+QFUPL="private.pem.key",1679,100
 CONNECT
-<Input the client.pem data, the size is 1679 bytes> +QFUPL: 1679,335f
+<Input the private.pem.key data, the size is 1679 bytes> +QFUPL: 1679,335f
 OK
 
 # configure CA certificate
-AT+QSSLCFG="cacert",2,"cacert.pem"
+AT+QSSLCFG="cacert",2,"rootca1.pem"
 OK
 
 # configure CC certificate
 AT+QSSLCFG="clientcert",2,"client.pem"
 
 # configure CK certificate
-AT+QSSLCFG="clientkey",2,"user_key.pem"
+AT+QSSLCFG="clientkey",2,"private.pem.key"
 OK
 
 # SSL authentication mode: server authentication
@@ -167,27 +167,27 @@ Now is a good time for a coffee break. I like to take time and enjoy the moment 
 
 ```console
 # start MQTT SSL connection
-AT+QMTOPEN=0, "a1zgnxur10j8ux.iot.us-east-1.amazonaws.com",”8883”
+AT+QMTOPEN=0, "{account.name}-ats.iot.us-east-1.amazonaws.com",”8883”
 OK
 +QMTOPEN: 0,0
 
 # connect to MQTT server
-AT+QMTCONN=0,"M26_0206"
+AT+QMTCONN=0,"datadog"
 OK
 +QMTCONN: 0,0,0
 
 # subscribe to topics
-AT+QMTSUB=0,1,"$aws/things/M26_0206/shadow/update/accepted",1
+AT+QMTSUB=0,1,"$aws/things/datadog/shadow/update/accepted",1
 OK
 +QMTSUB: 0,1,0,1
 
 # publish messages
-AT+QMTPUB=0,1,1,0,"$aws/things/M26_0206/shadow/update/accepted"
+AT+QMTPUB=0,1,1,0,"$aws/things/datadog/shadow/update/accepted"
 >This is publish data from client OK
 +QMTPUB: 0,1,0
 
 # data received from subscribed topic
-+QMTRECV: 0,1,"$aws/things/M26_0206/shadow/update/accepted",This is publish data from client"
++QMTRECV: 0,1,"$aws/things/datadog/shadow/update/accepted",This is publish data from client"
 
 # disconnect a client from MQTT server
 AT+QMTDISC=0
