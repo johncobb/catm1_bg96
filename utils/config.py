@@ -27,6 +27,22 @@ def char_count(filename):
 
     print(json.dumps(json_out, indent=4, sort_keys=True))
 
+def gen_cmd(filename):
+
+
+    key = ""
+    key_len = 0
+    # filename = input("Please enter the file name: ")
+
+    print("Opening %s", filename)
+
+    with open(filename) as file:
+        for line in file.readlines():
+            key_len += len(line)
+            key += line
+
+    print("AT+QFUPL=\"%s\",%s,100" % (filename.split("/")[-1], key_len))
+
 def argParse(opts, args):
     found_path = False
     global path, root, key, cert
@@ -79,6 +95,7 @@ if __name__ == "__main__":
         root = os.path.join(path, root)
         key = os.path.join(path, key)
         cert = os.path.join(path, cert)
+        gen_cmd(root)
 
         if os.path.isfile(root):
             char_count(root)
