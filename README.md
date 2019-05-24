@@ -86,6 +86,8 @@ OK
 
 
 
+
+
 # power down device
 AT+QPOWD
 
@@ -103,6 +105,23 @@ Well join the club. When I first set out to configure this and other modems that
 AT+QCFG="nwscanseq",020301
 OK
 ```
+
+### Preparing device for certificate uploads
+Before we begin uploading files certificates to the device we need to make sure we know what files already exist. We do this by listing the files and deleting any files that may confilct with our new configuration. In most cases I will remove all files before starting to configure the modem's SSL certificates.
+
+```console
+
+# listing files on the device
+AT+QFLST
++QFLST: "file_name.pem",980
+
+OK
+
+# removing files on the device
+AT+QFDEL="file_name.pem"
+OK
+```
+
 
 ### Configuring and connecting to Amazon's AWSIoT via SSL
 
