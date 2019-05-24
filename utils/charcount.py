@@ -49,9 +49,9 @@ def argParse(opts, args):
         elif optc in ["--cert", "-c"]:
             cert = arg
         
-        if not found_path:
-            print("Error: --path is a required argument.")
-            sys.exit()
+    if not found_path:
+        print("Error: --path is a required argument.")
+        sys.exit()
 
 
 
