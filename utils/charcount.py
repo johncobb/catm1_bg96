@@ -47,9 +47,7 @@ def argParse(opts, args):
         elif optc in ["--cert", "-c"]:
             cert = arg
 
-    print(path, " is path")
-    if os.path.isfile(path + root):
-        print("hehe")
+
 
 if __name__ == "__main__":
     print("Welcome to the future...")
@@ -60,14 +58,29 @@ if __name__ == "__main__":
         print("Please provide file!")
         sys.exit()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:h', 
-        ['cert=', 'rootca=', 'path=', "key=" ,'help'])
+        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:h', ['cert=', 'rootca=', 'path=', "key=" ,'help'])
+        # argParse(opts, args)
+
     except getopt.GetoptError:
         print("GetoptError")
         sys.exit(2)
     
-    argParse(opts, args)
+    if not opts and not args:
+        print("Error, no parameters provided")
+        sys.exit()
+    else:
+        argParse(opts, args)
 
-    char_count(path + "/" + root)
-    char_count(path + "/" + key)
-    char_count(path + "/" + cert)
+        root = os.path.join(path, root)
+        key = os.path.join(path, key)
+        cert = os.path.join(path, cert)
+
+        if os.path.isfile(root):
+            char_count(root)
+
+        if os.path.isfile(key):
+            char_count(key)
+
+        if os.path.isfile(cert):
+            char_count(cert)
+        
