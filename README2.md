@@ -45,8 +45,6 @@ Navigate back to the IoT Core dashboard and click Settings. Copy the endpoint fo
     - Legacy/Verisign: ```replace_with_your_name.iot.us-east-1.amazonaws.com```
 
 
-
-
 TODO: Identify length of certs (use util/charcount.py)
 CA Cert is Root CA (start out native one Root CA 1)
 Client Cert is certificate.pem.crt
