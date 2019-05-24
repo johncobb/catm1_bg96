@@ -29,10 +29,8 @@ def usageFunction():
     print("{0}\n{1}\n{2}\n{3}\n{4}".format(p, r, k, c, g))
 
 def char_count(filename):
-
     key = ""
     key_len = 0
-    # filename = input("Please enter the file name: ")
 
     print("Opening %s", filename)
 
@@ -102,14 +100,12 @@ def listToDictionary(list):
 
 if __name__ == "__main__":
     print("Welcome to the future...")
-    # char_count()
 
     if not sys.argv[1:]:
         print("Error: please provide arugments.")
         sys.exit()
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:h', ['cert=', 'rootca=', 'path=', "key=" ,'help'])
-
     except getopt.GetoptError:
         print("Error: invalid argument.")
         sys.exit(2)
