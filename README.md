@@ -111,7 +111,7 @@ The following commands configure a SSL based connection the Amazon IoT platform.
 ```console
 
 # configure MQTT session to use SSL mode
-AT+QMTCFG=”SSL”, 0, 1, 2
+AT+QMTCFG=”SSL”,0,1,2
 OK
 
 # if SSL authentication mode is "server authentication" store CA certificate to RAM
@@ -144,6 +144,7 @@ AT+QSSLCFG="clientkey",2,"key.pem"
 OK
 
 # SSL authentication mode: server authentication
+# TODO: The following command errored first several times we issued
 AT+QSSLCFG="seclevel”,2,2
 OK
 
@@ -152,7 +153,8 @@ AT+QSSLCFG="sslversion”,2,4
 OK
 
 # cipher suite
-AT+QSSLCFG="ciphersuite”,2,”0xFFFF”
+TODO: documentation shows quotes around 0xffff
+AT+QSSLCFG="ciphersuite”,2,0xffff
 OK
 
 # ignore time of authentication
@@ -167,7 +169,7 @@ Now is a good time for a coffee break. I like to take time and enjoy the moment 
 
 ```console
 # start MQTT SSL connection
-AT+QMTOPEN=0, "{account.name}-ats.iot.us-east-1.amazonaws.com",”8883”
+AT+QMTOPEN=0, "{account.name}-ats.iot.us-east-1.amazonaws.com",8883
 OK
 +QMTOPEN: 0,0
 
