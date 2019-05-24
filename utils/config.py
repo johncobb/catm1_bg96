@@ -29,7 +29,6 @@ def char_count(filename):
 
 def gen_cmd(filename):
 
-
     key = ""
     key_len = 0
     # filename = input("Please enter the file name: ")
@@ -41,7 +40,7 @@ def gen_cmd(filename):
             key_len += len(line)
             key += line
 
-    print("AT+QFUPL=\"%s\",%s,100" % (filename.split("/")[-1], key_len))
+    print("AT+QFUPL=\"%s\",%s,100" % (filename.split("/")[-1], str(key_len)))
 
 def argParse(opts, args):
     found_path = False
