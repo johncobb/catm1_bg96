@@ -5,28 +5,28 @@ path = ""
 root = ""
 key = ""
 cert = ""
-rootb = False
-keyb = False
-certb = False
-genb = False
+
+root_found = False
+key_found = False
+cert_found = False
+
+
+def usageFunction():
+    global p, r, k, c
+    print("{0}\n{1}\n{2}\n{3}\n\n".format(p, r, k, c))
+
 usageDict = {
     "p": "-p, --path, is the path containing the files",
     "r": "-r, --rootca, is the root certificate file name",
     "k": "-k, --key, is the key certificate file name",
     "c": "-c, --cert, is the client certificate",
-    'g': '-g, --gen, does',
-    "h": usageFunction()
+    "h": usageFunction,
 }
 
 p = usageDict['p']
 r = usageDict['r']
 k = usageDict['k']
 c = usageDict['c']
-g = usageDict['g']
-
-def usageFunction():
-    global p, r, k, c, g
-    print("{0}\n{1}\n{2}\n{3}\n{4}".format(p, r, k, c, g))
 
 def char_count(filename):
     key = ""
@@ -42,18 +42,21 @@ def char_count(filename):
     json_out = {
         "filename": filename.split("/")[-1],
         "key": key,
-        "len": key_len
+        "len": key_len,
     }
 
     print(json.dumps(json_out, indent=4, sort_keys=True))
+    print('AT+QFUPL=\"%s\",%s,100' % (filename.split("/")[-1], str(key_len)))
+
 
 def argParse(opts, args):
     found_path = False
-    global path, root, key, cert, rootb, keyb, certb, genb
+    global path, root, key, cert, root_found, key_found, cert_found
     for opt, arg in opts:
         optc = opt.lower()
         if optc in ['--help', '-h']:
-            usageDict['h']
+            usageDict['h']()
+            sys.exit()
         elif optc in ["--path", "-p"]:
             found_path = True
             if os.path.isdir(arg):
@@ -63,13 +66,13 @@ def argParse(opts, args):
                 sys.exit(1)
         elif optc in ["--rootca", "-r"]:
             root = arg
-            rootb = True
+            root_found = True
         elif optc in ["--key", "-k"]:
             key = arg
-            keyb = True
+            key_found = True
         elif optc in ["--cert", "-c"]:
             cert = arg
-            certb = True
+            cert_found = True
         elif optc in ['--gen', '-g']:
             pass
         
@@ -94,12 +97,12 @@ def listToDictionary(list):
             item = item[1]
 
         print(str(toPrint))
-        dicttoconvert[str(count)] = item
+        diction[str(count)] = item
         count += 1
     return diction
 
 if __name__ == "__main__":
-    print("Welcome to the future...")
+    print("Welcome to the Quectel BG96 certificate parser...")
 
     if not sys.argv[1:]:
         print("Error: please provide arugments.")
@@ -121,9 +124,15 @@ if __name__ == "__main__":
     key = os.path.join(path, key)
     cert = os.path.join(path, cert)
 
-    if path and not root and not key and not cert and not genb:
+    if path and not root and not key and not cert and not gen_found:
         print("Please enter either {0}, {1}, {2}, or {3}.".format(r, k, c, g))
         sys.exit(2)
+
+        root = os.path.join(path, root)
+        key = os.path.join(path, key)
+        cert = os.path.join(path, cert)
+
+
 
     if os.path.isfile(root):
         char_count(root)
