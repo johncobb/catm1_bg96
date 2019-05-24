@@ -28,12 +28,14 @@ def char_count(filename):
     print(json.dumps(json_out, indent=4, sort_keys=True))
 
 def argParse(opts, args):
+    found_path = False
     global path, root, key, cert
     for opt, arg in opts:
         optc = opt.lower()
         if optc in ['--help', '-h']:
             pass
         elif optc in ["--path", "-p"]:
+            found_path = True
             if os.path.isdir(arg):
                 path = arg
                 print(arg)
@@ -46,6 +48,10 @@ def argParse(opts, args):
             key = arg
         elif optc in ["--cert", "-c"]:
             cert = arg
+        
+        if not found_path:
+            print("Error: --path is a required argument.")
+            sys.exit()
 
 
 
@@ -55,14 +61,13 @@ if __name__ == "__main__":
     # char_count()
 
     if not sys.argv[1:]:
-        print("Please provide file!")
+        print("Error: please provide arugments.")
         sys.exit()
     try:
         opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:h', ['cert=', 'rootca=', 'path=', "key=" ,'help'])
-        # argParse(opts, args)
 
     except getopt.GetoptError:
-        print("GetoptError")
+        print("Error: invalid argument.")
         sys.exit(2)
     
     if not opts and not args:
