@@ -115,32 +115,32 @@ AT+QMTCFG=”SSL”, 0, 1, 2
 OK
 
 # if SSL authentication mode is "server authentication" store CA certificate to RAM
-AT+QFUPL="rootca1.pem",1758,100
+AT+QFUPL="root.pem",1758,100
 CONNECT
-<Input the rootca1.pem data, the size is 1758 bytes> +QFUPL: 1758,384a
+<Input the root.pem data, the size is 1758 bytes> +QFUPL: 1758,384a
 OK
 
 # if SSL authentication mode is "server authentication" store CC certificate to RAM
-AT+QFUPL="certificate.pem.crt",1220,100
+AT+QFUPL="cert.pem",1220,100
 CONNECT
-<Input the certificate.pem.crt data, the size is 1220 bytes> +QFUPL: 1220,2d53
+<Input the cert.pem data, the size is 1220 bytes> +QFUPL: 1220,2d53
 OK
 
 # if SSL authentication mode is "server authentication" store CK certificate to RAM
-AT+QFUPL="private.pem.key",1679,100
+AT+QFUPL="key.pem",1679,100
 CONNECT
 <Input the private.pem.key data, the size is 1679 bytes> +QFUPL: 1679,335f
 OK
 
 # configure CA certificate
-AT+QSSLCFG="cacert",2,"rootca1.pem"
+AT+QSSLCFG="cacert",2,"root.pem"
 OK
 
 # configure CC certificate
-AT+QSSLCFG="clientcert",2,"client.pem"
+AT+QSSLCFG="clientcert",2,"cert.pem"
 
 # configure CK certificate
-AT+QSSLCFG="clientkey",2,"private.pem.key"
+AT+QSSLCFG="clientkey",2,"key.pem"
 OK
 
 # SSL authentication mode: server authentication
