@@ -9,17 +9,19 @@ cert = ""
 root_found = False
 key_found = False
 cert_found = False
+log_found = False
 
 
 def usageFunction():
-    global p, r, k, c
-    print("{0}\n{1}\n{2}\n{3}\n\n".format(p, r, k, c))
+    global p, r, k, c, l
+    print("{0}\n{1}\n{2}\n{3}\n{4}\n\n".format(p, r, k, c, l))
 
 usageDict = {
-    "p": "-p, --path, is the path containing the files",
+    "p": "-p, --path, is the path containing the certs",
     "r": "-r, --rootca, is the root certificate file name",
     "k": "-k, --key, is the key certificate file name",
-    "c": "-c, --cert, is the client certificate",
+    "c": "-c, --cert, is the client certificate file name",
+    "l": "-l, --log, log output to console",
     "h": usageFunction,
 }
 
@@ -27,12 +29,13 @@ p = usageDict['p']
 r = usageDict['r']
 k = usageDict['k']
 c = usageDict['c']
+l = usageDict['l']
 
 def char_count(filename):
     key = ""
     key_len = 0
 
-    print("Opening %s", filename)
+    # print("Opening %s", filename)
 
     with open(filename) as file:
         for line in file.readlines():
@@ -44,14 +47,16 @@ def char_count(filename):
         "key": key,
         "len": key_len,
     }
-
-    print(json.dumps(json_out, indent=4, sort_keys=True))
-    print('AT+QFUPL=\"%s\",%s,100' % (filename.split("/")[-1], str(key_len)))
+    if log_found:
+        print('file: %s\tlen: %s' % (filename.split("/")[-1], str(key_len)))
+        print(key)
+        # print(json.dumps(json_out, indent=4, sort_keys=True))
+        # print('AT+QFUPL=\"%s\",%s,100' % (filename.split("/")[-1], str(key_len)))
 
 
 def argParse(opts, args):
     found_path = False
-    global path, root, key, cert, root_found, key_found, cert_found
+    global path, root, key, cert, root_found, key_found, cert_found, log_found
     for opt, arg in opts:
         optc = opt.lower()
         if optc in ['--help', '-h']:
@@ -73,6 +78,8 @@ def argParse(opts, args):
         elif optc in ["--cert", "-c"]:
             cert = arg
             cert_found = True
+        elif optc in ["--log", "-l"]:
+            log_found = True
         elif optc in ['--gen', '-g']:
             pass
         
@@ -102,13 +109,13 @@ def listToDictionary(list):
     return diction
 
 if __name__ == "__main__":
-    print("Welcome to the Quectel BG96 certificate parser...")
+    print("Welcome to the Quectel BG96 certificate parser...\r\n")
 
     if not sys.argv[1:]:
         print("Error: please provide arugments.")
         sys.exit()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:h', ['cert=', 'rootca=', 'path=', "key=" ,'help'])
+        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:l:h', ['cert=', 'rootca=', 'path=', 'key=', 'log=', 'help'])
     except getopt.GetoptError:
         print("Error: invalid argument.")
         sys.exit(2)
