@@ -48,10 +48,13 @@ def char_count(filename):
         "len": key_len,
     }
     if log_found:
-        print('file: %s\tlen: %s' % (filename.split("/")[-1], str(key_len)))
+
+        cmd = 'AT+QFUPL=\"%s\",%s,100' % (filename.split("/")[-1], str(key_len))
+
+        print('file: %s\nlen: %s\ncmd: %s' % (filename.split("/")[-1], str(key_len), cmd))
         print(key)
-        # print(json.dumps(json_out, indent=4, sort_keys=True))
-        # print('AT+QFUPL=\"%s\",%s,100' % (filename.split("/")[-1], str(key_len)))
+
+        
 
 
 def argParse(opts, args):
