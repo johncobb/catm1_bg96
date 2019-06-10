@@ -1,0 +1,22 @@
+>ATE0
+<OK
+>AT+CMEE=2
+<+QSIMSTAT: 1,1
+>AT+CPIN?
+<+CPIN: READY
+>AT+COPS?
+<+COPS: 0,0 "AT&T Hologram", 8
+>AT+CREG?
+<+CREG: 0,5 || +CREG: 0,1
+>AT+CGREG?
+<+CREG: 0,4
+>AT+QICSGP=1,1,"hologram", "", "", 1
+<OK
+>AT+QIACT=1
+<OK
+>AT+QIACT?
+<OK
+>AT+QIDEACT=1
+<OK
+>AT+QIOPEN=1,1,"TCP","220.180.239.201",8713,0,0
+<+QIOPEN: 0,0

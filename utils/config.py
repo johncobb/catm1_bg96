@@ -1,5 +1,5 @@
-import sys, getopt, os, glob
-import json
+import sys, getopt, os, glob, datetime, json, time
+from provisioning import setup, handler
 
 path = ""
 root = ""
@@ -10,10 +10,13 @@ root_found = False
 key_found = False
 cert_found = False
 log_found = False
-
+script_file_name = ""
+comport = ""
+baudrate = -1
+scripting_commands = {"cfg": []}
 
 def usageFunction():
-    global p, r, k, c, l
+    global p, r, k, c, l, cp, s
     print("{0}\n{1}\n{2}\n{3}\n{4}\n\n".format(p, r, k, c, l))
 
 usageDict = {
@@ -22,6 +25,9 @@ usageDict = {
     "k": "-k, --key, is the key certificate file name",
     "c": "-c, --cert, is the client certificate file name",
     "l": "-l, --log, log output to console",
+    "cp": "-cp, --comport, the comport for the device to automate the task",
+    "s": "-s, --script, the script file name and location of the scripting commands",
+    "b": "-b, --baudrate, the baudrate of the serial device",
     "h": usageFunction,
 }
 
@@ -30,6 +36,9 @@ r = usageDict['r']
 k = usageDict['k']
 c = usageDict['c']
 l = usageDict['l']
+cp = usageDict['cp']
+s = usageDict['s']
+b = usageDict['b']
 
 def char_count(filename):
     key = ""
@@ -54,12 +63,9 @@ def char_count(filename):
         print('file: %s\nlen: %s\ncmd: %s' % (filename.split("/")[-1], str(key_len), cmd))
         print(key)
 
-        
-
-
 def argParse(opts, args):
     found_path = False
-    global path, root, key, cert, root_found, key_found, cert_found, log_found
+    global path, root, key, cert, root_found, key_found, cert_found, log_found, script_file_name, comport, baudrate
     for opt, arg in opts:
         optc = opt.lower()
         if optc in ['--help', '-h']:
@@ -85,9 +91,19 @@ def argParse(opts, args):
             log_found = True
         elif optc in ['--gen', '-g']:
             pass
+        elif optc in ['--script', '-s']:
+            script_file_name = arg
+        elif optc in ['--comport', '-cp']:
+            comport = arg
+        elif optc in ['--baudrate', '-b']:
+            if arg.isdigit():
+                baudrate = int(arg)
+            else:
+                print("Baudrate must be an integer")
+                sys.exit(1)
         
-    if not found_path:
-        print("Error: --path is a required argument.")
+    if not found_path and not script_file_name:
+        print("Error: --path or --script is a required argument.")
         sys.exit()
 
 def getFilesInDir(path):
@@ -111,6 +127,25 @@ def listToDictionary(list):
         count += 1
     return diction
 
+def parse_script_commands(script_commands_filename):
+    with open(script_commands_filename) as file:
+        for line in file.readlines():
+            if line.startswith(">"):
+                scripting_commands['cfg'].append([line.replace(">", "")])
+            elif line.startswith("<"):
+                scripting_commands['cfg'][-1].append(line.replace('<', ''))
+            elif not line:
+                scripting_commands['cfg'].append([line, 'BLANK'])
+            elif line.startswith('#'):
+                scripting_commands['cfg'].append([line, 'COMMENT'])
+
+def runner():
+    parse_script_commands(script_file_name)
+    setup(comport=comport, baudrate=baudrate)
+    print(scripting_commands)
+    log_file_name = "logs/log_{0}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    handler(scripting_commands, log_file_name)
+
 if __name__ == "__main__":
     print("Welcome to the Quectel BG96 certificate parser...\r\n")
 
@@ -118,38 +153,38 @@ if __name__ == "__main__":
         print("Error: please provide arugments.")
         sys.exit()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:l:h', ['cert=', 'rootca=', 'path=', 'key=', 'log=', 'help'])
+        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:l:cp:s:b:h', ['cert=', 'rootca=', 'path=', 'key=', 'log=', "comport=", "script=", "baudrate=", 'help'])
     except getopt.GetoptError:
         print("Error: invalid argument.")
         sys.exit(2)
     
     if not opts and not args:
         print("Error, no parameters provided")
-        usageDict['h']
+        usageDict['h']()
         sys.exit()
     
     argParse(opts, args)
 
-    root = os.path.join(path, root)
-    key = os.path.join(path, key)
-    cert = os.path.join(path, cert)
+    if script_file_name:
+        if baudrate == -1 and not comport:
+            print("Please enter {0} and {1} for the script to be able to automate the device.".format(c, b))
+        else:
+            runner()
+    
+    if path:
+        if not root and not key and not cert:
+            print("Please enter either {0}, {1}, {2}, or {3}.".format(r, k, c))
+            sys.exit(2)
+        else:
+            root = os.path.join(path, root)
+            key = os.path.join(path, key)
+            cert = os.path.join(path, cert)
 
-    if path and not root and not key and not cert and not gen_found:
-        print("Please enter either {0}, {1}, {2}, or {3}.".format(r, k, c, g))
-        sys.exit(2)
+            if os.path.isfile(root):
+                char_count(root)
 
-        root = os.path.join(path, root)
-        key = os.path.join(path, key)
-        cert = os.path.join(path, cert)
+            if os.path.isfile(key):
+                char_count(key)
 
-
-
-    if os.path.isfile(root):
-        char_count(root)
-
-    if os.path.isfile(key):
-        char_count(key)
-
-    if os.path.isfile(cert):
-        char_count(cert)
-        
+            if os.path.isfile(cert):
+                char_count(cert)
