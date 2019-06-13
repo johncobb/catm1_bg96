@@ -1,0 +1,66 @@
+[
+    "AT+QPOWD\r",
+    "POWERED DOWN",
+    1.0
+]
+
+[
+            "AT+QMTOPEN=0,\"ah2fpu2q2t4m4.iot.us-east-1.amazonaws.com\",8883\r",
+            "+QMTOPEN: ",
+            5.0
+        ]
+[
+            "AT+QMTCONN=0,\"MattEVB\"\r",
+            "+QMTCONN:",
+            1.0
+        ],
+        [
+            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+            ">",
+            1.0
+        ],
+        [
+            "0\r",
+            "+QMTPUB:",
+            1.0
+        ],
+        [
+            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+            ">",
+            5.0
+        ],
+        [
+            "1\r",
+            "+QMTPUB:",
+            5.0
+        ],
+        [
+            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+            ">",
+            5.0
+        ],
+        [
+            "2\r",
+            "+QMTPUB:",
+            5.0
+        ],
+        [
+            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+            ">",
+            5.0
+        ],
+        [
+            "3\r",
+            "+QMTPUB:",
+            5.0
+        ]
+
+AT+QFUPL="ufs:root.crt",1758,2000
+AT+QFUPL="ufs:client.crt",1224,2000
+AT+QFUPL="ufs:key.pem",1679,2000
+AT+QSSLCFG="cacert",2,"ufs:root.crt"
+AT+QSSLCFG="clientcert",2,"ufs:client.crt"
+AT+QSSLCFG="clientkey",2,"ufs:key.pem"
+AT+QMTOPEN=0,"ah2fpu2q2t4m4.iot.us-east-1.amazonaws.com",8883
+AT+QMTCONN=0,"MattEVB"
+AT+QMTPUB=0,0,0,0,"topic/pub"
