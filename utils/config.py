@@ -106,12 +106,6 @@ def argParse(opts, args):
     if not found_path and not arg_config_found:
         print("Error: --path or --config is a required argument.")
         sys.exit()
-    # if not arg_device_found:
-    #     print("Error: --device is a required argument.")
-    #     sys.exit()
-    # if not arg_baud_found:
-    #     print("Error: --baud is a required argument.")
-    #     sys.exit()
 
 def getFilesInDir(path):
     toReturn = []

@@ -5,54 +5,54 @@
 ]
 
 [
-            "AT+QMTOPEN=0,\"ah2fpu2q2t4m4.iot.us-east-1.amazonaws.com\",8883\r",
-            "+QMTOPEN: ",
-            5.0
-        ]
+    "AT+QMTOPEN=0,\"ah2fpu2q2t4m4.iot.us-east-1.amazonaws.com\",8883\r",
+    "+QMTOPEN: ",
+    5.0
+],
 [
-            "AT+QMTCONN=0,\"MattEVB\"\r",
-            "+QMTCONN:",
-            1.0
-        ],
-        [
-            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
-            ">",
-            1.0
-        ],
-        [
-            "0\r",
-            "+QMTPUB:",
-            1.0
-        ],
-        [
-            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
-            ">",
-            5.0
-        ],
-        [
-            "1\r",
-            "+QMTPUB:",
-            5.0
-        ],
-        [
-            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
-            ">",
-            5.0
-        ],
-        [
-            "2\r",
-            "+QMTPUB:",
-            5.0
-        ],
-        [
-            "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
-            ">",
-            5.0
-        ],
-        [
-            "3\r",
-            "+QMTPUB:",
-            5.0
+    "AT+QMTCONN=0,\"MattEVB\"\r",
+    "+QMTCONN:",
+    1.0
+],
+[
+    "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+    ">",
+    1.0
+],
+[
+    "0{esc}\r",
+    "+QMTPUB:",
+    1.0
+],
+[
+    "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+    "1{esc\r",
+    5.0
+],
+[
+    "1{esc}\r",
+    "+QMTPUB:",
+    5.0
+],
+[
+    "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+    ">",
+    5.0
+],
+[
+    "2{esc}\r",
+    "+QMTPUB:",
+    5.0
+],
+[
+    "AT+QMTPUB=0,0,0,0,\"topic/pub\"\r",
+    ">",
+    1.0
+],
+[
+    "3{esc}\r",
+    "+QMTPUB:",
+    5.0
         ]
 
 AT+QFUPL="ufs:root.crt",1758,2000
