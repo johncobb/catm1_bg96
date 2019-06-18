@@ -116,38 +116,42 @@ def cfg_handler(cfg):
         cmd_to = float(key[2])
 
         if cmd.find("file:") > -1:
-            cert_filepath = cmd.replace("file:").strip()
+            cert_filepath = cmd.replace("file:", "").strip()
             if os.path.isfile(cert_filepath):
                 # Extract the file from the path
                 cert_filename = cert_filepath.split("/")[-1]
-                with open(cmd) as file:
+                print(cmd, " is cmd")
+                with open(cert_filepath) as file:
                     for line in file.readlines():
                         data += line
                         byte += len(line)
                     
                     cert_filedata = data
                     cert_filesize = byte
+                continue
 
         if cmd.find("AT+QFUPL") > -1:
-            cmd = cmd.replace("{file}", cert_filename).replace("size", str(cert_filesize))
-
-
+            cmd = cmd.replace("{file}", cert_filename).replace("{size}", str(cert_filesize))
+            cert_filepath = ""
+            cert_filename = ""
+        
+        
         # store the start time of the command
         cmd_ts = time.time()
 
         # send command to modem
         send(cmd)
 
-        while True:
-            prov_tick(cmd_ts, rsp, cmd_to)
-            
-        # reset the buffer
-        buffer = ""
-        # reset delimeter_found flag
-        delimeter_found = False
-        rsp_found = False
+        prov_tick(cmd_ts, rsp, cmd_to)
 
-        # readSer(cmd_ts, rsp, cmd_to)
+        if cert_filedata and cert_filesize > 0:
+            cmd_ts = time.time()
+
+            send(cert_filedata)
+            prov_tick(cmd_ts, "QFUPL:", cmd_to)
+
+            cert_filedata = ""
+            cert_filesize = 0
 
     # close the port
     if (ser.isOpen()):
@@ -185,6 +189,7 @@ def setup(device="/dev/tty.usbserial-FTB49XIB", config="quec.config.json", baud=
     footer()
 
     try:
+        print(config, " config")
         with open(config) as json_file:
             cfg = json.load(json_file)
 

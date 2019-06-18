@@ -18,7 +18,7 @@ baudrate = -1
 config = ""
 
 def usageFunction():
-    global p, r, k, c, l, cp, s
+    global p, r, k, c, l, co, b
     print("{0}\n{1}\n{2}\n{3}\n{4}\n\n".format(p, r, k, c, l))
 
 usageDict = {
@@ -28,7 +28,7 @@ usageDict = {
     "c": "-c, --cert, is the client certificate file name",
     "l": "-l, --log, log output to console",
     "d": "-d, --device, the comport for the device to automate the task",
-    "co": "-c, --config, the script file name and location of the scripting commands",
+    "co": "-co, --config, the script file name and location of the scripting commands",
     "b": "-b, --baudrate, the baudrate of the serial device",
     "h": usageFunction,
 }
@@ -99,12 +99,12 @@ def argParse(opts, args):
             else:
                 print("Baudrate must be an integer")
                 sys.exit(1)
-        elif optc in ["--config", "-c"]:
+        elif optc in ["--config", "-co"]:
             arg_config_found = True
             config = arg
         
     if not found_path and not arg_config_found:
-        print("Error: --path or --script is a required argument.")
+        print("Error: --path or --config is a required argument.")
         sys.exit()
     # if not arg_device_found:
     #     print("Error: --device is a required argument.")
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         print("Error: please provide arugments.")
         sys.exit()
     try:
-        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:l:d:co:b:h', ['cert=', 'rootca=', 'path=', 'key=', 'log=', "device=", "config=", "baudrate=", 'help'])
+        opts, args = getopt.getopt(sys.argv[1:], 'c:r:p:k:l:d:co:b:h', ['cert=', 'rootca=', 'path=', 'key=', 'log=', "device=", "config=", "baud=", 'help'])
     except getopt.GetoptError:
         print("Error: invalid argument.")
         sys.exit(2)
@@ -157,7 +157,10 @@ if __name__ == "__main__":
         if baudrate == -1 and not device:
             print("Please enter {0} and {1} for the script to be able to automate the device.".format(co, b))
         else:
-            setup()
+            if config and baudrate > 0 and device:
+                setup(device=device, config=config, baud=baudrate)
+            else:
+                setup()
     
     if path:
         if not root and not key and not cert:
