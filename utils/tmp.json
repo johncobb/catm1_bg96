@@ -1,0 +1,15 @@
+{
+    "cfg":
+    [
+        [
+            "file: /Users/tylermeserve/Desktop/certs/AmazonRootLeg.pem",
+            "{file} {data} {size}",
+            5.0
+        ],
+        [
+            "AT+QFUPL=\"ufs:{file}\",{size},2000\r",
+            "CONNECT",
+            5.0
+        ]
+    ]
+}

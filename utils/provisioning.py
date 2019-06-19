@@ -68,6 +68,9 @@ def prov_tick(cmd_ts, rsp, cmd_to):
         # process the modem's response
         while(ser.in_waiting > 0):
             # read next line form serial port
+
+            if rsp == ">":
+                line = ser.read(1).decode("utf")
             line = ser.readline().decode("utf-8")
             # accumulate a local buffer
             buffer += line
