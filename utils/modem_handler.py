@@ -29,8 +29,16 @@ class ModemHandler(object):
     def footer(self):
         print("--------------------------------------")
     
-    def modemDataReceived(self, buffer):
+    def modemDataReceived(self, buffer, log_file):
         print('Callback function modemDataReceived ', buffer)
+
+        if buffer == None:
+            print("Buffer is none!")
+            return
+
+        with open(log_file, "a") as file:
+            data = buffer.replace('\n', "").replace("\r", "")
+            file.write("RCV: {0}\r\n".format(data))
 
     def line_handler(self, buffer, rsp):
         return buffer.find(rsp) > -1
@@ -48,7 +56,7 @@ class ModemHandler(object):
         print("sending command: ", cmd)
         self.ser.write(cmd.encode())
     
-    def prov_tick(self, cmd_ts, rsp, cmd_to):
+    def prov_tick(self, cmd_ts, rsp, cmd_to, log_file):
         buffer = ""
         # reset delimeter_found flag
         delimeter_found = False
@@ -79,7 +87,7 @@ class ModemHandler(object):
                 # data = expect(buffer, rsp)
                 # if data.ExpectFound:
                 #     print("ExpectData: ", data.ExpectData)
-                self.callbackFunc(buffer)
+                self.callbackFunc(buffer, log_file)
                 print("elapsed: ", elapsed)
                 self.footer()
                 break
@@ -87,7 +95,7 @@ class ModemHandler(object):
             # let outer while loop breathe
         time.sleep(.1)
     
-    def cmd_handler(self, cmd, rsp, cmd_to):
+    def cmd_handler(self, cmd, rsp, cmd_to, log_file):
         data = ""
         byte = 0
         
@@ -97,13 +105,13 @@ class ModemHandler(object):
         # send command to modem
         self.send(cmd)
 
-        self.prov_tick(cmd_ts, rsp, cmd_to)
+        self.prov_tick(cmd_ts, rsp, cmd_to, log_file)
 
         if self.cert_filedata and self.cert_filesize > 0:
             cmd_ts = time.time()
 
             self.send(self.cert_filedata)
-            self.prov_tick(cmd_ts, "QFUPL:", cmd_to)
+            self.prov_tick(cmd_ts, "QFUPL:", cmd_to, log_file)
 
             self.cert_filedata = ""
             self.cert_filesize = 0

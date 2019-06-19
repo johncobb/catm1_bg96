@@ -144,6 +144,11 @@ def setup():
     return cfg
 
 if __name__ == '__main__':
+    slash = ""
+    if sys.platform == "linux" or sys.platform == "linux2" or sys.platform == "darwin":
+        slash = "/"
+    elif sys.platform == "win32":
+        slash = "\\"
     print("Welcome to the Quectel BG96 certificate parser...\r\n")
 
     if not sys.argv[1:]:
@@ -175,6 +180,17 @@ if __name__ == '__main__':
             mh = ModemHandler()
     
     print(arg_config_found)
+
+    log_file_dir = "{0}{1}logs{1}".format(os.getcwd(), slash)
+    if not os.path.isdir(log_file_dir):
+        os.mkdir(log_file_dir)
+    
+    log_file_name = "log_{0}".format(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    log_file_path = log_file_dir + log_file_name
+
+    if not os.path.isfile(log_file_path):
+        open(log_file_path, "x").close()
+            
             
     for key in cfg['cfg']:
         # pull command, expect and timeout from config
@@ -206,4 +222,4 @@ if __name__ == '__main__':
             cert_filepath = ""
             mh.cert_filename = ""
         
-        rsp = mh.cmd_handler(cmd, rsp, cmd_to)
+        rsp = mh.cmd_handler(cmd, rsp, cmd_to, log_file_path)
